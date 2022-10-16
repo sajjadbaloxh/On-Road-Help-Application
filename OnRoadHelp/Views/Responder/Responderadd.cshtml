@@ -1,0 +1,213 @@
+﻿@model OnRoadHelp.Models.AddService
+
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <title>Geolocation</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!-- jsFiddle will insert css and js -->
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+</body>
+</html>
+<script>
+    @*var markers = @Html.Raw(ViewBag.Markers);*@
+    let map;
+    let infooWindow;
+    var newmarker;
+    var locationtxt;
+    let cureent;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 4,
+            // center means fcous point  maps for example we want to see pakistan //
+            center: { lat: 33.327, lng: 71.067 },
+        });
+        // postion ka mtlb hy jaha hum ny map ka pin show karwana ho//
+        newmarker = new google.maps.Marker({
+            position: { lat: 33.64817783333333, lng: 73.06803533333333 },
+            //drag means marker ko apnimarzi say move kar skaty hy //
+            draggable: true,
+            // shashky marker upand down//
+            animation: google.maps.Animation.DROP,
+           
+           // ya lazmi hy har trha ki pin kaliya yahi sentex likhy gy ap ky map ma ya marker show karwata hy // 
+            map: map,
+            // titile ka mtlb hy marker ka name //
+            title: "Your Location"
+        });
+        // lat and lang pic karta hy content ma save karta hy 
+        var contentStringfastu = '{ lat: 33.64817783333333, lng: 73.06803533333333 }';
+        var infowindow = new google.maps.InfoWindow({
+            content: contentStringfastu,
+        });
+        //as say oper wala content show ho raha hota hy //
+        infowindow.open(map, newmarker);
+        locationtxt = infowindow.content;//ya oper verabile baniya hy infow window ly rahy hy jo ky lat and lang hy 
+        const myArray1 = locationtxt.split(',');
+        const myArray2 = myArray1[0].split(':');
+        const myArray3 = myArray1[1].split(':');
+        const datafinal = myArray2[1];
+        const myArray4 = myArray3[1].split(" ");
+        const data2final = myArray4[1];
+        Latval.value = datafinal;
+        Lngval.value = data2final;
+        // mouse click jidr karo waha pin ajay //
+        map.addListener("click", (mapsMouseEvent) => {
+
+            newmarker.setMap(null),
+                // Close the current InfoWindow.
+                newmarker = new google.maps.Marker({
+                    position: mapsMouseEvent.latLng,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    /*animation: google.maps.Animation.BOUNCE,*/
+                    map: map,
+                    title: "Your Location"
+                })
+            // Create a new InfoWindow.
+            var infowindow = new google.maps.InfoWindow({
+
+            });
+            infowindow.setContent(
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            );
+            locationtxt = infowindow.content;
+            const myArray1 = locationtxt.split(',');
+            const myArray2 = myArray1[0].split(':');
+            const myArray3 = myArray1[1].split(':');
+            const datafinal = myArray2[1];
+            const myArray4 = myArray3[1].split("}");
+            const data2final = myArray4[0];
+            Latval.value = datafinal;
+            Lngval.value = data2final;
+            newmarker.addListener("click", info);
+            function info() {
+                infowindow.open(map, newmarker);
+                if (newmarker.getAnimation() !== null) {
+                    newmarker.setAnimation(null);
+                } else {
+                    newmarker.setAnimation(google.maps.Animation.BOUNCE);
+                }
+            }
+        });
+
+
+
+        // ya say cuurent location ka kam start ho raha hy //
+        const locationButton = document.createElement("button");    //ya ak var banta hy jis ma ap button ma click karty ho msg chala jata hy  
+
+        locationButton.textContent = "Pan to Current Location";     //  jo hum ny text likha howa hy current loaction  waly button ka //
+        locationButton.classList.add("custom-map-control-button");   // map ky andar button jo bana howa hy current loaction ka 
+        locationButton.style.border = 0;
+        locationButton.style.border.radius = "2px";
+        locationButton.style.height = "40px";
+        locationButton.style.cursor = 'pointer';
+
+        //// current loaction kaliya 
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);     // map ky andar button jo bana howa hy current loaction ka 
+        //yeh button clickka event ha
+        locationButton.addEventListener("click", () => {
+          
+
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        newmarker.setMap(null);
+                        newmarker = new google.maps.Marker({
+                            position: pos,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP,
+                            /*animation: google.maps.Animation.BOUNCE,*/
+                            map: map,
+                            title: "Your Location"
+                        })
+                        //yeh text m lat and lng save krta ha current location ka
+                        newmarker.setPosition(pos);
+                        cureent = pos.lat;
+                        locationtxt = pos.lng;
+                        Latval.value = cureent;
+                        Lngval.value = locationtxt;
+
+                        infooWindow = new google.maps.InfoWindow();
+                        infooWindow.setContent("Location found.");
+                        infooWindow.open(map, newmarker);
+                        map.setCenter(pos);
+
+                    },
+                    () => {
+                        handleLocationError(true, infooWindow, map.getCenter());
+                    }
+                );
+                locationtxt = newmarker.position;
+
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infooWindow, map.getCenter());
+            }
+        });
+    }//yaha tak current location ka kam khatm ho gya ha 
+
+    //yeh function agr ap ke location off ha to allert dy diya ga
+    function handleLocationError(browserHasGeolocation, infooWindow, pos) {
+        alert("your location not working or location is off! ");
+        infoWindow.setPosition(pos);
+        infooWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infooWindow.open(map);
+    }
+
+    window.initMap = initMap;
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5xZF-fjAHyJhiDvCXnuW9hcal1HKm_O4&callback=initMap&v=weekly"
+        defer></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>User</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Latval, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Latval, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Latval, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Lngval, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Lngval, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Lngval, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="btn btn-danger" />
+        </div>
+    </div>
+    <br />
+</div>
+}

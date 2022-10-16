@@ -1,0 +1,150 @@
+﻿@model OnRoadHelp.Models.HelpRequest
+
+
+<html>
+<head>
+    <title>Distance Map</title>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Distance Map</h1>
+    <!--The div elements for the map and message -->
+    <div id="map"></div>
+    <br />
+    <h2 id="msg1"></h2>
+    <br />
+    <h2 id="msg2"></h2>
+    <script>
+        // Initialize and add the map
+         var markers = @Html.Raw(ViewBag.Markers);//yaha viewbag sy pin ka data db sy ah raha ha
+        var map;
+        var newmarker;
+        let infooWindow;
+        let v = 0;
+        function initMap() {
+            var mapOptions = {
+                center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+                zoom: 12,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            for (i = 0; i < 1; i++) {
+                var data = markers[i]
+                var myLatlng1 = new google.maps.LatLng(data.lat, data.lng);
+                var marker = new google.maps.Marker({
+                    position: myLatlng1,
+                    map: map,
+                    title: data.u_problem
+                });
+                function load(marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.title);
+                        infoWindow.open(map, marker);
+                    });
+                }
+                load(marker, data);
+
+            }
+
+
+            const locationButton = document.createElement("button");
+
+            locationButton.textContent = " Current Location";
+            locationButton.classList.add("custom-map-control-button");
+            locationButton.style.border = 0;
+            locationButton.style.border.radius = "2px";
+            locationButton.style.height = "40px";
+            locationButton.style.cursor = 'pointer';
+            let myLatlng;
+
+
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+            locationButton.addEventListener("click", () => {
+                // Try HTML5 geolocation.
+
+                if (navigator.geolocation) {
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+
+                            newmarker = new google.maps.Marker({
+                                position: pos,
+                                animation: google.maps.Animation.DROP,
+                                /*animation: google.maps.Animation.BOUNCE,*/
+                                map: map,
+                                title: "Your Location"
+                            })
+                            newmarker.setPosition(pos);
+
+                            myLatlng = new google.maps.LatLng(pos.lat, pos.lng);
+                            var line = new google.maps.Polyline({ path: [myLatlng1, myLatlng], map: map });
+
+
+
+                            var R = 3958.8; // Radius of the Earth in miles
+                             var rlat1 = marker.position.lat() * (Math.PI / 180); // Convert degrees to radians
+                            var rlat2 = newmarker.position.lat() * (Math.PI / 180); // Convert degrees to radians
+                            var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+                            var difflon = (newmarker.position.lng() - marker.position.lng()) * (Math.PI / 180); // Radian difference (longitudes)
+                            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+
+
+                                var distancek = d * 1.609344;
+
+                            document.getElementById('msg1').innerHTML = "Distance between User Location and " + newmarker.title + " " + d.toFixed(2) + " Mile.";
+                            document.getElementById('msg2').innerHTML = "Distance between User Location and " + newmarker.title + " " + distancek.toFixed(2) + " Kilometer.";
+
+
+
+
+                            infooWindow = new google.maps.InfoWindow();
+                            infooWindow.setContent("Your Location.");
+                            infooWindow.open(map, newmarker);
+                            map.setCenter(pos);
+
+
+                        },
+                        () => {
+                            handleLocationError(true, infooWindow, map.getCenter());
+                        }
+                    );
+                }
+                else
+                {
+                        // Browser doesn't support Geolocation
+                        handleLocationError(false, infooWindow, map.getCenter());
+                }
+            });
+
+
+
+        }
+
+            // Calculate and display the distance between markers
+        function handleLocationError(browserHasGeolocation, infooWindow, pos) {
+            alert("Map Not Working Properly");
+            infoWindow.setPosition(pos);
+            infooWindow.setContent(
+                browserHasGeolocation
+                    ? "Error: The Geolocation service failed."
+                    : "Error: Your browser doesn't support geolocation."
+            );
+            infooWindow.open(map);
+        }
+        window.initMap = initMap;
+    </script>
+    <!--Load the API from the specified URL -- remember to replace YOUR_API_KEY-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5xZF-fjAHyJhiDvCXnuW9hcal1HKm_O4&callback=initMap&v=weekly"
+            defer></script>
+</body>
+</html>

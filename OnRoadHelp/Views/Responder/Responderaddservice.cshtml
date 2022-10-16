@@ -1,0 +1,51 @@
+﻿@model OnRoadHelp.Models.AddService
+
+@{
+    ViewBag.Title = "Responderaddservice";
+    Layout = "~/Views/Shared/ResponderDashboardShared.cshtml";
+}
+
+<div>
+    <h1 style="text-align :center"><b>Welcome to ON Road Help</b></h1>
+</div>
+<br>
+<h1 style="text-align:center;"><b> Add Service</b></h1>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <center>
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+
+                @Html.EditorFor(model => model.ServiceName, new { htmlAttributes = new { @class = "fadeIn second", placeholder = "Service Name" } })
+                @Html.ValidationMessageFor(model => model.ServiceName, "", new { @class = "text-danger" })
+                <br />
+                <br />
+
+
+                @Html.EditorFor(model => model.ServiceLocation, new { htmlAttributes = new { @class = "fadeIn second", placeholder = "Service Location" } })
+                @Html.ValidationMessageFor(model => model.ServiceLocation, "", new { @class = "text-danger" })
+
+                @Html.ActionLink("Google Map", "Responderadd", new { @class = "btn btn-danger" })
+                <br />
+                <br />
+
+
+
+                @Html.EditorFor(model => model.ServiceType, new { htmlAttributes = new { @class = "fadeIn second", placeholder = "Service Type" } })
+                @Html.ValidationMessageFor(model => model.ServiceType, "", new { @class = "text-danger" })
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-8">
+                        <br />
+                        <input type="submit" value="Add Service" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+}

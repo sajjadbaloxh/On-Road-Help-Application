@@ -1,0 +1,58 @@
+﻿@model IEnumerable<OnRoadHelp.Models.HelpRequest>
+
+@{
+    ViewBag.Title = "userCompleteTaskHistory";
+    Layout = "~/Views/Shared/UserDashboardShared.cshtml";
+}
+
+<h2> Usser History</h2>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.u_problem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.u_pcategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTime)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+       
+        <th>
+            Action
+        </th>
+    </tr>
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.u_problem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.u_pcategory)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTime)
+        </td>
+
+        <td>
+           <span style="color:red;font-weight:bold"> @Html.DisplayFor(modelItem => item.status) </span>
+        </td>
+
+
+        <td>
+
+            @Html.ActionLink("Remove", "Deletehistoryuser", new { aid = item.u_id },
+    new { onclick = "return confirm('Are sure wants to Remove?');" })
+        </td>
+    </tr>
+}
+
+</table>

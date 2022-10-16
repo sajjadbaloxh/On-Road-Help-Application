@@ -1,0 +1,104 @@
+﻿@model IEnumerable<OnRoadHelp.Models.HelpRequest>
+
+@{
+    ViewBag.Title = "HelpHistory";
+    Layout = "~/Views/Shared/UserDashboardShared.cshtml";
+}
+
+<h2>HelpHistory</h2>
+<p align="right">
+    <a href="@Url.Action("reqHelpuser", "Home")"><i style="font-size: 28px; margin-right: 110px" class="fa">&#xf0fe;</i></a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Problem
+        </th>
+        <th>
+            Catagoery
+        </th>
+
+        <th>
+            DateTime
+        </th>
+        <th>
+            Status
+        </th>
+
+        <th>
+           Action
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.u_problem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.u_pcategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            
+
+            <td>
+                @if (item.status == "Pending")
+                {
+                    <b style="color:blue;">Pending</b>
+
+                }
+                @if (item.status == "Accept")
+
+                {
+                    <b style="color:Green;">Accept</b>
+
+
+                }
+                @if (item.status == "Complete")
+
+                {
+                    <b style="color:red;">Task Completed</b>
+
+
+                }
+
+            </td>
+           
+            <td>
+                @if (item.status == "Accept")
+                {
+                    <a href="@Url.Action("Userviewmap", "Home")">
+                        <input type="submit" value="View Map" class="btn-primary">
+
+                    </a>
+                    <a href="@Url.Action("CompleteTask", "Home", new {  helpId=item.Helpid  })">
+                        <input type="submit" value="Complete" class="btn-primary">
+
+                    </a>
+
+                }
+                @if (item.status == "Complete")
+                {
+                    <a href="@Url.Action("Userviewmap", "Home")">
+                        <input type="submit" value="View Map" class="btn-primary">
+
+                    </a>
+
+
+                }
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+@*<p align="right">
+    <a href="@Url.Action("reqHelpuser", "Home")">
+        <input type="submit" class="btn-danger" value="Add New Request" />
+
+    </a>
+</p>*@

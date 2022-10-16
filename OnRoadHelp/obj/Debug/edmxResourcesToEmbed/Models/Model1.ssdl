@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OnRoadHelpModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AddService">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Service_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Service_Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="DateTime" Type="date" />
+    <Property Name="lat" Type="float" />
+    <Property Name="lon" Type="float" />
+    <Property Name="urid" Type="int" />
+  </EntityType>
+  <EntityType Name="AvailableService">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToleranceTime" Type="int" />
+  </EntityType>
+  <EntityType Name="HelpRequest">
+    <Key>
+      <PropertyRef Name="Helpid" />
+    </Key>
+    <Property Name="Helpid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="lat" Type="float" />
+    <Property Name="lon" Type="float" />
+    <Property Name="DateTime" Type="date" />
+    <Property Name="u_problem" Type="nvarchar" MaxLength="50" />
+    <Property Name="status" Type="nvarchar" MaxLength="50" />
+    <Property Name="u_id" Type="int" />
+    <Property Name="u_pcategory" Type="nvarchar" MaxLength="50" />
+    <Property Name="ResponderId" Type="int" />
+    <Property Name="UserRating" Type="float" />
+    <Property Name="RespRating" Type="float" />
+  </EntityType>
+  <EntityType Name="HelpRequestAssigned">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HelpRequestId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="AssignedTime" Type="datetime" />
+    <Property Name="StatusFlag" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="First_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Last_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="PhoneNumbers" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK__AddService__urid__0F975522">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="AddService" Type="Self.AddService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AddService">
+        <PropertyRef Name="urid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HelpReques__u_id__108B795B">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="HelpRequest" Type="Self.HelpRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="HelpRequest">
+        <PropertyRef Name="u_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OnRoadHelpModelStoreContainer">
+    <EntitySet Name="AddService" EntityType="Self.AddService" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AvailableService" EntityType="Self.AvailableService" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpRequest" EntityType="Self.HelpRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpRequestAssigned" EntityType="Self.HelpRequestAssigned" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__AddService__urid__0F975522" Association="Self.FK__AddService__urid__0F975522">
+      <End Role="User" EntitySet="User" />
+      <End Role="AddService" EntitySet="AddService" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HelpReques__u_id__108B795B" Association="Self.FK__HelpReques__u_id__108B795B">
+      <End Role="User" EntitySet="User" />
+      <End Role="HelpRequest" EntitySet="HelpRequest" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

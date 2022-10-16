@@ -1,0 +1,51 @@
+﻿@model IEnumerable<OnRoadHelp.Controllers.servicesummary>
+@*ya wala class kay sat hy model ky sat ni hy*@
+@{
+    ViewBag.Title = "GetSummary";
+    Layout = "~/Views/Shared/UserDashboardShared.cshtml";
+}
+<h2> Summary Services</h2>
+<form method="post">
+    <label style="">
+        From
+        <input type="date" name="dfrom" />
+    </label>
+    <label>
+        TO
+        <input type="date" name="dto" />
+    </label>
+    <button type="submit">Submit</button>
+</form>
+
+<table class="table">
+    <tr>
+        <th>
+
+            @Html.DisplayNameFor(model => model.Service_Type)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.count)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+
+                @Html.DisplayFor(modelItem => item.Service_Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.count)
+            </td>
+            <td>
+
+                @Html.ActionLink("Remove", "DeleteSummary", new { aid=item.Service_Type },
+        new { onclick = "return confirm('Are sure wants to Remove?');" })
+            </td>
+        </tr>
+
+    }
+</table>
+

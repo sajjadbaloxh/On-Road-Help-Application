@@ -1,0 +1,70 @@
+﻿@model IEnumerable<OnRoadHelp.Models.DisplayAllResponder>
+
+@{
+    ViewBag.Title = "displayallresponder";
+    Layout = "~/Views/Shared/Admin_Dashboard_SharedView.cshtml";
+}
+
+<h2>Dsiplay All REsponder</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceLocation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latval)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lngval)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    @Html.HiddenFor(modelItem => item.id)
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceLocation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Latval)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lngval)
+        </td>
+        <td>
+
+
+            @Html.ActionLink("Delete", "DeleteResponder", new { aid = item.id },
+    new { onclick = "return confirm('Are sure wants to delete?');" })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<OnRoadHelp.Models.Locations>
+
+@{
+    ViewBag.Title = "helpRequestHistoryResponder";
+    Layout = "~/Views/Shared/ResponderDashboardShared.cshtml";
+}
+<table class="table">
+    <tr>
+        <th>
+            <b>No</b>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.issue)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.DateTime)
+        </th>
+
+
+        <th>
+            Status
+        </th>
+
+        <td>
+            <b> Actions</b>
+        </td>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.issue)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+
+
+
+            <td>
+                @if (item.stat == 0)
+                {
+                    <b style="color:Blue;">Waiting For Approval</b>
+
+                }
+                else if (item.stat == 1)
+                {
+                    <b style="color:Green;">Accept</b>
+                }
+                else
+                {
+                    <b style="color:red;">Reject</b>
+                }
+            </td>
+            <td>
+                <a href="@Url.Action("AcceptRequest", "Responder", new {  aid=item.ID  })">
+                    <input type="submit" value="Accept" class="btn-primary">
+
+                </a>
+                <a href="@Url.Action("RejectRequest", "Responder", new {  aid=item.ID  })">
+                    <input type="submit" value="Reject" class="btn-primary">
+
+                </a>
+                <a href="@Url.Action("Responderviewmap", "Responder")">
+                    <input type="submit" value="View Map" class="btn-primary">
+
+                </a>
+                <a href="@Url.Action("completetask", "Responder", new {  aid=item.ID  })">
+                    <input type="submit" value="Complete Service" class="btn-primary">
+
+                </a>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

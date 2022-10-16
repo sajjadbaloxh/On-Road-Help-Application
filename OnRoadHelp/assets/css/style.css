@@ -1,0 +1,15 @@
+.navbar-brand
+{
+    font-size: 40px;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin:0 auto;
+}
+.navbar-brand b{
+    color: brown;
+}
+.dopmrg{
+    margin-left: 200px;
+}

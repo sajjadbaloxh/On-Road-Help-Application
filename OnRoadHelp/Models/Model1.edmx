@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OnRoadHelpModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AddService">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Service_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Service_Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateTime" Type="date" />
+          <Property Name="lat" Type="float" />
+          <Property Name="lon" Type="float" />
+          <Property Name="urid" Type="int" />
+        </EntityType>
+        <EntityType Name="AvailableService">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToleranceTime" Type="int" />
+        </EntityType>
+        <EntityType Name="HelpRequest">
+          <Key>
+            <PropertyRef Name="Helpid" />
+          </Key>
+          <Property Name="Helpid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lat" Type="float" />
+          <Property Name="lon" Type="float" />
+          <Property Name="DateTime" Type="date" />
+          <Property Name="u_problem" Type="nvarchar" MaxLength="50" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+          <Property Name="u_id" Type="int" />
+          <Property Name="u_pcategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResponderId" Type="int" />
+          <Property Name="UserRating" Type="float" />
+          <Property Name="RespRating" Type="float" />
+        </EntityType>
+        <EntityType Name="HelpRequestAssigned">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HelpRequestId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="AssignedTime" Type="datetime" />
+          <Property Name="StatusFlag" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="First_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Last_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumbers" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__AddService__urid__0F975522">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="AddService" Type="Self.AddService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AddService">
+              <PropertyRef Name="urid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__HelpReques__u_id__108B795B">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="HelpRequest" Type="Self.HelpRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="HelpRequest">
+              <PropertyRef Name="u_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnRoadHelpModelStoreContainer">
+          <EntitySet Name="AddService" EntityType="Self.AddService" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AvailableService" EntityType="Self.AvailableService" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HelpRequest" EntityType="Self.HelpRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HelpRequestAssigned" EntityType="Self.HelpRequestAssigned" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AddService__urid__0F975522" Association="Self.FK__AddService__urid__0F975522">
+            <End Role="User" EntitySet="User" />
+            <End Role="AddService" EntitySet="AddService" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HelpReques__u_id__108B795B" Association="Self.FK__HelpReques__u_id__108B795B">
+            <End Role="User" EntitySet="User" />
+            <End Role="HelpRequest" EntitySet="HelpRequest" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnRoadHelpModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="First_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Last_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AddServices" Relationship="OnRoadHelpModel.FK__AddService__urid__0F975522" FromRole="User" ToRole="AddService" />
+          <NavigationProperty Name="HelpRequests" Relationship="OnRoadHelpModel.FK__HelpReques__u_id__108B795B" FromRole="User" ToRole="HelpRequest" />
+        </EntityType>
+        <EntityContainer Name="OnRoadHelpEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="AddServices" EntityType="OnRoadHelpModel.AddService" />
+          <AssociationSet Name="FK__AddService__urid__0F975522" Association="OnRoadHelpModel.FK__AddService__urid__0F975522">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AddService" EntitySet="AddServices" />
+          </AssociationSet>
+          <EntitySet Name="HelpRequests" EntityType="OnRoadHelpModel.HelpRequest" />
+          <AssociationSet Name="FK__HelpReques__u_id__108B795B" Association="OnRoadHelpModel.FK__HelpReques__u_id__108B795B">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HelpRequest" EntitySet="HelpRequests" />
+          </AssociationSet>
+          <EntitySet Name="HelpRequestAssigneds" EntityType="OnRoadHelpModel.HelpRequestAssigned" />
+          <EntitySet Name="AvailableServices" EntityType="OnRoadHelpModel.AvailableService" />
+        </EntityContainer>
+        <EntityType Name="AddService">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Service_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Service_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateTime" Type="DateTime" Precision="0" />
+          <Property Name="lat" Type="Double" />
+          <Property Name="lon" Type="Double" />
+          <Property Name="urid" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="OnRoadHelpModel.FK__AddService__urid__0F975522" FromRole="AddService" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__AddService__urid__0F975522">
+          <End Type="OnRoadHelpModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="OnRoadHelpModel.AddService" Role="AddService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AddService">
+              <PropertyRef Name="urid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="HelpRequest">
+          <Key>
+            <PropertyRef Name="Helpid" />
+          </Key>
+          <Property Name="Helpid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lat" Type="Double" />
+          <Property Name="lon" Type="Double" />
+          <Property Name="DateTime" Type="DateTime" Precision="0" />
+          <Property Name="u_problem" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="u_id" Type="Int32" />
+          <Property Name="u_pcategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResponderId" Type="Int32" />
+          <Property Name="UserRating" Type="Double" />
+          <Property Name="RespRating" Type="Double" />
+          <NavigationProperty Name="User" Relationship="OnRoadHelpModel.FK__HelpReques__u_id__108B795B" FromRole="HelpRequest" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__HelpReques__u_id__108B795B">
+          <End Type="OnRoadHelpModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="OnRoadHelpModel.HelpRequest" Role="HelpRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="HelpRequest">
+              <PropertyRef Name="u_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="HelpRequestAssigned">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HelpRequestId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="AssignedTime" Type="DateTime" Precision="3" />
+          <Property Name="StatusFlag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AvailableService">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToleranceTime" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnRoadHelpModelStoreContainer" CdmEntityContainer="OnRoadHelpEntities1">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="OnRoadHelpModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="PhoneNumbers" ColumnName="PhoneNumbers" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+                <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AddServices">
+            <EntityTypeMapping TypeName="OnRoadHelpModel.AddService">
+              <MappingFragment StoreEntitySet="AddService">
+                <ScalarProperty Name="urid" ColumnName="urid" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Service_Name" ColumnName="Service_Name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HelpRequests">
+            <EntityTypeMapping TypeName="OnRoadHelpModel.HelpRequest">
+              <MappingFragment StoreEntitySet="HelpRequest">
+                <ScalarProperty Name="RespRating" ColumnName="RespRating" />
+                <ScalarProperty Name="UserRating" ColumnName="UserRating" />
+                <ScalarProperty Name="ResponderId" ColumnName="ResponderId" />
+                <ScalarProperty Name="u_pcategory" ColumnName="u_pcategory" />
+                <ScalarProperty Name="u_id" ColumnName="u_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="u_problem" ColumnName="u_problem" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="Helpid" ColumnName="Helpid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HelpRequestAssigneds">
+            <EntityTypeMapping TypeName="OnRoadHelpModel.HelpRequestAssigned">
+              <MappingFragment StoreEntitySet="HelpRequestAssigned">
+                <ScalarProperty Name="StatusFlag" ColumnName="StatusFlag" />
+                <ScalarProperty Name="AssignedTime" ColumnName="AssignedTime" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="HelpRequestId" ColumnName="HelpRequestId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AvailableServices">
+            <EntityTypeMapping TypeName="OnRoadHelpModel.AvailableService">
+              <MappingFragment StoreEntitySet="AvailableService">
+                <ScalarProperty Name="ToleranceTime" ColumnName="ToleranceTime" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

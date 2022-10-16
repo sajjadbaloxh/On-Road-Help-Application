@@ -1,0 +1,246 @@
+﻿@model OnRoadHelp.Models.HelpRequest
+
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <title>Gogle Maps</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i|Open+Sans:400,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="~/light/css/themefisher-fonts.min.css">
+    <link rel="stylesheet" href="~/light/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/light/css/main.css">
+    <link rel="stylesheet" href="~/light/css/style.css">
+    <link id="color-changer" rel="stylesheet" href="~/light/css/colors/color-0.css">
+    <!-- jsFiddle will insert css and js -->
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+</body>
+</html>
+<script src="~/light/js/vendor/jquery-2.2.4.min.js"></script>
+<script src="~/light/js/vendor/bootstrap.min.js"></script>
+<script src="~/light/js/jquery.easing.min.js"></script>
+<script src="~/light/js/isotope.pkgd.min.js"></script>
+<script src="~/light/js/jquery.nicescroll.min.js"></script>
+<script src="~/light/js/owl.carousel.min.js"></script>
+<script src="~/light/js/jquery-validation.min.js"></script>
+<script src="~/light/js/main.js"></script>
+<script>
+    var markers = @Html.Raw(ViewBag.Markers);
+    let map;
+    let infooWindow;
+    var newmarker;
+    var locationtxt;
+    let cureent;
+    function initMap() {
+        var mapOptions = {
+            center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var infoWindow = new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        for (i = 0; i < markers.length; i++) {
+            var data = markers[i]
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: data.title
+            });
+            function load(marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    infoWindow.setContent(data.description);
+                    infoWindow.open(map, marker);
+                });
+            }
+            load(marker, data);
+
+        }
+
+        newmarker = new google.maps.Marker({
+            position: { lat: 33.6844, lng: 73.0479 },
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            /*animation: google.maps.Animation.BOUNCE,*/
+            map: map
+        });
+        var contentStringfastu = '{ lat: 33.720001, lng: 74.059998 }';
+        var infowindow = new google.maps.InfoWindow({
+            content: contentStringfastu,
+        });
+        infowindow.open(map, newmarker);
+        locationtxt = infowindow.content;
+        const myArray1 = locationtxt.split(',');
+        const myArray2 = myArray1[0].split(':');
+        const myArray3 = myArray1[1].split(':');
+        const datafinal = myArray2[1];
+        const myArray4 = myArray3[1].split(" ");
+        const data2final = myArray4[1];
+        lat.value = datafinal;
+        lon.value = data2final;
+
+        map.addListener("click", (mapsMouseEvent) => {
+
+            newmarker.setMap(null),
+                // Close the current InfoWindow.
+                newmarker = new google.maps.Marker({
+                    position: mapsMouseEvent.latLng,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    /*animation: google.maps.Animation.BOUNCE,*/
+                    map: map,
+                    title: "Your Location"
+                })
+            // Create a new InfoWindow.
+            var infowindow = new google.maps.InfoWindow({
+
+            });
+            infowindow.setContent(
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            );
+            locationtxt = infowindow.content;
+            const myArray1 = locationtxt.split(',');
+            const myArray2 = myArray1[0].split(':');
+            const myArray3 = myArray1[1].split(':');
+            const datafinal = myArray2[1];
+            const myArray4 = myArray3[1].split("}");
+            const data2final = myArray4[0];
+            lat.value = datafinal;
+            lon.value = data2final;
+            newmarker.addListener("click", info);
+            function info() {
+                infowindow.open(map, newmarker);
+                if (newmarker.getAnimation() !== null) {
+                    newmarker.setAnimation(null);
+                } else {
+                    newmarker.setAnimation(google.maps.Animation.BOUNCE);
+                }
+            }
+        });
+
+
+
+
+        const locationButton = document.createElement("button");
+
+        locationButton.textContent = "Current Location";
+        locationButton.classList.add("custom-map-control-button");
+        locationButton.style.border = 0;
+        locationButton.style.border.radius = "2px";
+        locationButton.style.height = "40px";
+        locationButton.style.cursor = 'pointer';
+
+
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+        locationButton.addEventListener("click", () => {
+            // Try HTML5 geolocation.
+
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        newmarker.setMap(null);
+                        newmarker = new google.maps.Marker({
+                            position: pos,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP,
+                            /*animation: google.maps.Animation.BOUNCE,*/
+                            map: map,
+                            title: "Your Location"
+                        })
+                        newmarker.setPosition(pos);
+                        cureent = pos.lat;
+                        locationtxt = pos.lng;
+                        lat.value = cureent;
+                        lon.value = locationtxt;
+
+                        infooWindow = new google.maps.InfoWindow();
+                        infooWindow.setContent("Location found.");
+                        infooWindow.open(map, newmarker);
+                        map.setCenter(pos);
+
+                    },
+                    () => {
+                        handleLocationError(true, infooWindow, map.getCenter());
+                    }
+                );
+                locationtxt = newmarker.position;
+
+                //alert(locationtxt);
+                //alert(cureent);
+                //const myArray1 = locationtxt.split(',');
+                //const myArray2 = myArray1[0].split('(');
+                //const datafinal = myArray2[1];
+                //const myArray4 = myArray1[1].split(")");
+                //const data2final = myArray4[0];
+                //latval.value = datafinal;
+                //lngval.value = data2final;
+
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infooWindow, map.getCenter());
+            }
+        });
+    }
+
+    function handleLocationError(browserHasGeolocation, infooWindow, pos) {
+        alert("mappppp");
+        infoWindow.setPosition(pos);
+        infooWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infooWindow.open(map);
+    }
+
+    window.initMap = initMap;
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoZT5nyiVwkuLB_Ok2wOgAb9tG5qNnTUc&callback=initMap&v=weekly"
+        defer></script>
+<center>
+    @using (Html.BeginForm("usermap", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <form>
+           
+            <div style="width:300px">
+                @Html.TextBoxFor(m => m.u_pcategory, new { @Value = Request.QueryString["type"], @class = "hidden" })
+                <div style="width:300px">
+        <div style="width:300px">
+                    <br>
+                    @Html.EditorFor(model => model.u_problem, new { htmlAttributes = new { @class = "fadeIn second", @placeholder = "Enter Problem" } })
+                    @Html.ValidationMessageFor(model => model.u_problem, "", new { @class = "text-danger" })
+                    <br>
+                    @*@Html.EditorFor(model => model.u_pcategory, new { htmlAttributes = new { @class = "fadeIn second", @placeholder = "Enter Category" } })
+                    @Html.ValidationMessageFor(model => model.u_pcategory, "", new { @class = "text-danger" })*@
+                    <br>
+                    @Html.EditorFor(model => model.lat, new { htmlAttributes = new { @class = "fadeIn third" } })
+                    @Html.ValidationMessageFor(model => model.lat, "", new { @class = "text-danger" })
+                    <br>
+                    @Html.EditorFor(model => model.lon, new { htmlAttributes = new { @class = "fadeIn third" } })
+                    @Html.ValidationMessageFor(model => model.lon, "", new { @class = "text-danger" })
+                    <br>
+
+                </div>
+                <input type="submit" class="btn-primery" value=" Sent Request" />
+
+</form>
+    }
+
+
+</center>

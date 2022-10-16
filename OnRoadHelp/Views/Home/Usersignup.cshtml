@@ -1,0 +1,144 @@
+﻿@model OnRoadHelp.Models.User
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html class="no-js" lang="">
+<head>
+    <!-- meta charset -->
+    <meta charset="utf-8">
+    <!-- site title -->
+    <title>User Login</title>
+    <!-- meta description -->
+    <meta name="description" content="">
+    <!-- mobile viwport meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- fevicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- ================================
+    CSS Files
+    ================================= -->
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i|Open+Sans:400,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="~/light/css/themefisher-fonts.min.css">
+    <link rel="stylesheet" href="~/light/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/light/css/main.css">
+    <link rel="stylesheet" href="~/light/css/style.css">
+    <link id="color-changer" rel="stylesheet" href="~/light/css/colors/color-0.css">
+
+
+</head>
+
+<body>
+
+    <div class="preloader">
+        <div class="loading-mask"></div>
+        <div class="loading-mask"></div>
+        <div class="loading-mask"></div>
+        <div class="loading-mask"></div>
+        <div class="loading-mask"></div>
+    </div>
+
+    <main class="site-wrapper">
+        <div class="pt-table">
+            <div class="pt-tablecell page-about relative">
+                <!-- .close -->
+                <a href="./" class="page-close"><i class="tf-ion-close"></i></a>
+                <!-- /.close -->
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8">
+                            <div class="page-title text-center">
+                                <h2>
+                                    <span class="title-bg"></span>
+                                    ON ROAD <span class="primary">HELP</span> </span>
+                                </h2>
+
+                            </div>
+                        </div>
+
+                        <div class="wrapper fadeInDown">
+                            <div id="formContent">
+                                <!-- Tabs Titles -->
+                                <!-- Icon -->
+                                <div class="fadeIn first">
+                                    <b>User Signup</b>
+                                </div>
+
+                                <!-- Login Form -->
+                                @using (Html.BeginForm("Usersignup","Home", "FormMethod.Post"))
+                                {
+                                    @Html.AntiForgeryToken()
+                            <form>
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                @Html.EditorFor(model => model.First_Name, new { htmlAttributes = new { @class = "fadeIn second", @placeholder = "Enter First Name" } })
+                                @Html.ValidationMessageFor(model => model.First_Name, "", new { @class = "text-danger" })
+
+
+
+                                @Html.EditorFor(model => model.Last_Name, new { htmlAttributes = new { @class = "fadeIn third", @placeholder = "Enter Last Name" } })
+                                @Html.ValidationMessageFor(model => model.Last_Name, "", new { @class = "text-danger" })
+
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "fadeIn third", @placeholder = "Enter Email" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+
+
+                                @Html.EditorFor(model => model.PhoneNumbers, new { htmlAttributes = new { @class = "fadeIn third", @placeholder = "Enter Phone Number" } })
+                                @Html.ValidationMessageFor(model => model.PhoneNumbers, "", new { @class = "text-danger" })
+
+
+
+                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "", @style = "background-color: #f6f6f6;color: #0d0d0d;padding: 15px 32px;text-align: center;font-size: 16px;margin: 5px;width: 85%;border: 2px solid #f6f6f6;transition: all 0.5s ease-in-out;border-radius: 5px 5px 5px 5px;", @placeholder = "Enter Password" } })
+
+                                <br>
+
+                                @Html.EditorFor(model => model.Confirmpwd, new { htmlAttributes = new { @class = "", @style = "background-color: #f6f6f6;color: #0d0d0d;padding: 15px 32px;text-align: center;font-size: 16px;margin: 5px;width: 85%;border: 2px solid #f6f6f6;transition: all 0.5s ease-in-out;border-radius: 5px 5px 5px 5px;", @placeholder = "Confirm Password" } })
+                                <br> @Html.ValidationMessageFor(model => model.Confirmpwd, "", new { @class = "text-danger" })<br />
+                                <br> @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                <br />
+
+                                <input type="submit" class="btn-primery" value=" Sign Up" />
+                            </form>
+                                    }
+
+                                    <!-- Remind Passowrd -->
+                                    <div id="formFooter">
+
+                                        <a class="underlineHover" href="/Home/Userlogin">Already User?</a>
+                                    </div>
+
+</div>
+                        </div>
+
+                        <nav class="page-nav clear">
+                            <div class="container">
+                                <div class="flex flex-middle space-between">
+
+                                    <span class="copyright hidden-xs">Copyright &copy; 2022 Sajjad Hussain, All Rights Reserved.</span>
+
+                                </div>
+                            </div>
+                            <!-- /.page-nav -->
+                        </nav>
+                        <!-- /.container -->
+                    </div> <!-- /.pt-tablecell -->
+                </div> <!-- /.pt-table -->
+    </main> <!-- /.site-wrapper -->
+    <!-- ================================
+    JavaScript Libraries
+    ================================= -->
+    <script src="~/light/js/vendor/jquery-2.2.4.min.js"></script>
+    <script src="~/light/js/vendor/bootstrap.min.js"></script>
+    <script src="~/light/js/jquery.easing.min.js"></script>
+    <script src="~/light/js/isotope.pkgd.min.js"></script>
+    <script src="~/light/js/jquery.nicescroll.min.js"></script>
+    <script src="~/light/js/owl.carousel.min.js"></script>
+    <script src="~/light/js/jquery-validation.min.js"></script>
+    <script src="~/light/js/main.js"></script>
+</body>
+</html>

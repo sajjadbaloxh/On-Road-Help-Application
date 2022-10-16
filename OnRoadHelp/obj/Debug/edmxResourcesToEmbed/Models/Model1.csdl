@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OnRoadHelpModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="First_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Last_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AddServices" Relationship="OnRoadHelpModel.FK__AddService__urid__0F975522" FromRole="User" ToRole="AddService" />
+    <NavigationProperty Name="HelpRequests" Relationship="OnRoadHelpModel.FK__HelpReques__u_id__108B795B" FromRole="User" ToRole="HelpRequest" />
+  </EntityType>
+  <EntityContainer Name="OnRoadHelpEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="AddServices" EntityType="OnRoadHelpModel.AddService" />
+    <AssociationSet Name="FK__AddService__urid__0F975522" Association="OnRoadHelpModel.FK__AddService__urid__0F975522">
+      <End Role="User" EntitySet="Users" />
+      <End Role="AddService" EntitySet="AddServices" />
+    </AssociationSet>
+    <EntitySet Name="HelpRequests" EntityType="OnRoadHelpModel.HelpRequest" />
+    <AssociationSet Name="FK__HelpReques__u_id__108B795B" Association="OnRoadHelpModel.FK__HelpReques__u_id__108B795B">
+      <End Role="User" EntitySet="Users" />
+      <End Role="HelpRequest" EntitySet="HelpRequests" />
+    </AssociationSet>
+    <EntitySet Name="HelpRequestAssigneds" EntityType="OnRoadHelpModel.HelpRequestAssigned" />
+    <EntitySet Name="AvailableServices" EntityType="OnRoadHelpModel.AvailableService" />
+  </EntityContainer>
+  <EntityType Name="AddService">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Service_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Service_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DateTime" Type="DateTime" Precision="0" />
+    <Property Name="lat" Type="Double" />
+    <Property Name="lon" Type="Double" />
+    <Property Name="urid" Type="Int32" />
+    <NavigationProperty Name="User" Relationship="OnRoadHelpModel.FK__AddService__urid__0F975522" FromRole="AddService" ToRole="User" />
+  </EntityType>
+  <Association Name="FK__AddService__urid__0F975522">
+    <End Type="OnRoadHelpModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="OnRoadHelpModel.AddService" Role="AddService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AddService">
+        <PropertyRef Name="urid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="HelpRequest">
+    <Key>
+      <PropertyRef Name="Helpid" />
+    </Key>
+    <Property Name="Helpid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="lat" Type="Double" />
+    <Property Name="lon" Type="Double" />
+    <Property Name="DateTime" Type="DateTime" Precision="0" />
+    <Property Name="u_problem" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="u_id" Type="Int32" />
+    <Property Name="u_pcategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ResponderId" Type="Int32" />
+    <Property Name="UserRating" Type="Double" />
+    <Property Name="RespRating" Type="Double" />
+    <NavigationProperty Name="User" Relationship="OnRoadHelpModel.FK__HelpReques__u_id__108B795B" FromRole="HelpRequest" ToRole="User" />
+  </EntityType>
+  <Association Name="FK__HelpReques__u_id__108B795B">
+    <End Type="OnRoadHelpModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="OnRoadHelpModel.HelpRequest" Role="HelpRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="HelpRequest">
+        <PropertyRef Name="u_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="HelpRequestAssigned">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HelpRequestId" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="AssignedTime" Type="DateTime" Precision="3" />
+    <Property Name="StatusFlag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="AvailableService">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ToleranceTime" Type="Int32" />
+  </EntityType>
+</Schema>

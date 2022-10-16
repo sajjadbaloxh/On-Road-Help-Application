@@ -1,0 +1,59 @@
+﻿@model IEnumerable<OnRoadHelp.Models.AddService>
+
+@{
+    ViewBag.Title = "displayMyservices";
+    Layout = "~/Views/Shared/UserDashboardShared.cshtml";
+}
+
+<h2>Display My Services</h2>
+<p align="right">
+    <a href="@Url.Action("Responderaddservice", "Home")"><i style="font-size:28px;margin-right:130px" class="fa">&#xf0fe;</i></a>
+</p>
+
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            Service Name
+        </th>
+        <th>
+            Service Type
+        </th>
+        <th>
+           DateTime
+        </th>
+
+
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service_Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+
+
+
+
+            <td>
+
+
+                @Html.ActionLink("Remove", "DeleteService", new { aid = item.id },
+        new { onclick = "return confirm('Are sure wants to Remove?');" })
+            </td>
+        </tr>
+    }
+
+</table>

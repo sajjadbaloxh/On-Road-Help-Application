@@ -1,0 +1,88 @@
+﻿@model IEnumerable<OnRoadHelp.Models.HelpRequest>
+
+@{
+    ViewBag.Title = "displayalluserhistory";
+    Layout = "~/Views/Shared/UserDashboardShared.cshtml";
+}
+
+<h2> TO Respond </h2>
+<table class="table">
+    <tr>
+        <th>
+            Problem
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            DateTime
+        </th>
+        <th>
+            Action
+        </th>
+
+    
+    </tr>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.u_problem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.u_pcategory)
+        </td>
+        <td>
+            @if (item.status == "Pending")
+            {
+                <b style="color:Blue;">Pending</b>
+
+            }
+            else if (item.status =="Accept")
+            {
+                <b style="color:Green;">Accept</b>
+            }
+            else
+            {
+                <b style="color:red;">Complete</b>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTime)
+        </td>
+
+
+
+        <td>
+            @if (item.status == "Pending")
+            {
+                <a href="@Url.Action("RespondRequest", "Home", new {  helpId=item.Helpid,type="Accept"})">
+                    <input type="submit" value="Accept" class="btn-primary">
+
+                </a>
+
+                <a href="@Url.Action("RespondRequest", "Home", new {  helpId=item.Helpid,type="Reject"  })">
+                    <input type="submit" value="Reject" class="btn-primary">
+
+                </a>
+                <a href="@Url.Action("Responderviewmap", "Home"@*, new {  id=item.Helpid  }*@)">
+                    <input type="submit" value="View Map" class="btn-primary">
+
+                </a>
+            }
+            @if (item.status == "Accept")
+            {
+                <a href="@Url.Action("Responderviewmap", "Home"@*, new {  id=item.lid  }*@)">
+                    <input type="submit" value="View Map" class="btn-primary">
+
+                </a>
+
+            }
+        </td>
+
+    </tr>
+}
+
+</table>
